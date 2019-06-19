@@ -1,0 +1,2 @@
+# dotmgr
+Modular dotfiles manager 
