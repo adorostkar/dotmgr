@@ -3,7 +3,7 @@
 
 [[ "$1" == "source" ]] || \
 
-echo 'Dotfiles - Ali "Ashkan" Dorostkar'
+echo 'DotManager - Ali "Ashkan" Dorostkar'
 
 if [[ "$1" == "-h" || "$1" == "--help" ]]; 
 then 
@@ -12,7 +12,7 @@ cat <<HELP
 Usage: $(basename "$0")
 
 See the README for documentation.
-https://github.com/ashkan2200/dotfiles
+https://github.com/ashkan2200/dotmgr
 
 HELP
 exit; 
@@ -40,6 +40,8 @@ DOTFILES_GH_BRANCH=${DOTFILES_GH_BRANCH:-master}
 DOTFILES_GH_USER=${DOTFILES_GH_USER:-ashkan2200}
 BACKUP_DIR="$HOME/.cache/dotfiles/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
 CACHE_DIR="$HOME/.cache/dotfiles/cache/"
+MAN_DIR="$HOME/.cache/dotfiles/man/" # TODO: Need to update this to point into .local/share/...
+# TODO: should we pass and install directory to .local/ or some other place if an script needs it?
 DOTFILES_SCRIPT_RUNNING=1
 function cleanup {
   unset DOTFILES_SCRIPT_RUNNING
@@ -81,7 +83,7 @@ fi
 #   # Dotfiles directory doesn't exist? Clone it!
 #   e_header "Downloading dotfiles"
 #   git clone --branch ${DOTFILES_GH_BRANCH} --recursive \
-#     git://github.com/${DOTFILES_GH_USER}/dotfiles.git $DOTFILES
+#     git://github.com/${DOTFILES_GH_USER}/dotmgr.git $DOTFILES
 #   cd $DOTFILES
 # elif [[ "$1" != "restart" ]]; then
 #   # Make sure we have the latest files.
@@ -103,11 +105,12 @@ fi
 #
 
 
-# TODO: source shared folder
+# Source shared folder, everything that is needed for this
+# script and will be sourced in every shell after setups
 for f in ./shared/*
 do
-	echo "sourcing $f"
-	source $f
+    echo "sourcing $f"
+    source $f
 done
 
 # Get every folder that has install.sh in it under current directory
@@ -118,14 +121,16 @@ modules=$(find . -mindepth 2 -maxdepth 2 -name "install.sh" -printf "%h\n")
 oses=($(get_os 1))
 ptrn="(^[^a-z]("
 for os in "${oses[@]}"; do
-	ptrn="${ptrn}$os|"
+    ptrn="${ptrn}$os|"
 done
 ptrn="${ptrn::-1})($|[^a-z])"
 
 
-# TODO change cache placement
-folders=($(filter_files $modules $ptrn ./cache.txt $prompt_delay))
+# Where to place the install cache
+dotfile_cachedir=$HOME/.cache/dotfiles/install_cache.txt
+folders=($(filter_files $modules $ptrn $dotfile_cachedir $prompt_delay))
 for d in "${folders[@]}"; do
-	e_arrow "Installing $d"
-	$d/install.sh --cache ${CACHE_DIR} --backup ${BACKUP_DIR} 
+    e_arrow "Processing $d"
+    $d/install.sh --cache ${CACHE_DIR} --backup ${BACKUP_DIR} --man ${MAN_DIR}
 done
+
