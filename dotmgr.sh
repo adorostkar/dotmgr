@@ -138,5 +138,6 @@ dotfile_cachedir=$HOME/.cache/dotmgr/install_cache.txt
 folders=($(filter_files "$modules" "$ptrn" "./cache.txt" "$prompt_delay"))
 for d in "${folders[@]}"; do
     e_arrow "Processing $d"
-    $d/install.sh --cache ${CACHE_DIR} --backup ${BACKUP_DIR} --man ${MAN_DIR}
+    $d/install.sh --cache-prefix ${CACHE_DIR} --backup-prefix ${BACKUP_DIR}
+	--man-prefix ${MAN_DIR}
 done

@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-TEMPLATE_INSTALL_PREFIX=${INSTALL_PREFIX:-/path/to/install/root}
-TEMPLATE_CACHE_PREFIX=${TEMPLATE_CACHE_PREFIX:-/path/to/cache/root}
-TEMPLATE_BACKUP_PREFIX=${TEMPLATE_BACKUP_PREFIX:-/path/to/backup/root}
-TEMPLATE_MAN_PREFIX=${TEMPLATE_MAN_PREFIX:-/path/to/man/root}
+# Write the correct path for these variable in order to make
+# default paths
+__INSTALL_PREFIX=/path/to/install/root
+__CACHE_PREFIX=/path/to/cache/root
+__BACKUP_PREFIX=/path/to/backup/root
+__MAN_PREFIX=/path/to/man/root
 
 help(){
 cat<<HELP
@@ -11,10 +13,10 @@ Usage: $(basename $0) [option]
 
 Options:
    -p/--prefix         : set prefix directory for install, cache and backup folder
-   -i/--install: set prefix directory for install folder
-   -c/--cache: set prefix directory for cache folder
-   -b/--backup: set prefix directory for backup folder
-   -m/--man: set prefix directory for backup folder
+   -i/--install-prefix: set prefix directory for install folder
+   -c/--cache-prefix: set prefix directory for cache folder
+   -b/--backup-prefix: set prefix directory for backup folder
+   -m/--man-prefix: set prefix directory for backup folder
 HELP
 }
 
@@ -25,26 +27,26 @@ do
     key="$1"
     case $key in
         -p|--prefix)
-            TEMPLATE_INSTALL_PREFIX=$2
-            TEMPLATE_CACHE_PREFIX=$2
-            TEMPLATE_BACKUP_PREFIX=$2
-            TEMPLATE_MAN_PREFIX=$2
+            __INSTALL_PREFIX=$2
+            __CACHE_PREFIX=$2
+            __BACKUP_PREFIX=$2
+            __MAN_PREFIX=$2
             shift 2 # past argument
             ;;
         -i|--install)
-            TEMPLATE_INSTALL_PREFIX=$2
+            __INSTALL_PREFIX=$2
             shift 2 # past argument
             ;;
         -c|--cache)
-            TEMPLATE_CACHE_PREFIX=$2
+            __CACHE_PREFIX=$2
             shift 2 # past argument
             ;;
         -b|--backup)
-            TEMPLATE_BACKUP_PREFIX=$2
+            __BACKUP_PREFIX=$2
             shift 2 # past argument
             ;;
         -m|--man)
-            TEMPLATE_MAN_PREFIX=$2
+            __MAN_PREFIX=$2
             shift 2 # past argument
             ;;
         *)  # unknown option
@@ -59,6 +61,8 @@ done
 # This is called by the dotfiles script
 install() {
     process_commands $@
+    # check if the paths are non empty (if it is necessary
+    # for the installation
 
 }
 
