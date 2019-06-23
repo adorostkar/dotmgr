@@ -82,29 +82,29 @@ fi
 
 # # Initialize.
 # if [[ ! -d $DOTMGR ]]; then
-#   # Dotmgr directory doesn't exist? Clone it!
-#   e_header "Downloading dotmgr"
-#   git clone --branch ${DOTMGR_GH_BRANCH} --recursive \
-#     git://github.com/${DOTMGR_GH_USER}/dotmgr.git $DOTMGR
-#   cd $DOTMGR
+# 	# Dotmgr directory doesn't exist? Clone it!
+# 	e_header "Downloading dotmgr"
+# 	git clone --branch ${DOTMGR_GH_BRANCH} --recursive \
+# 		git://github.com/${DOTMGR_GH_USER}/dotmgr.git $DOTMGR
+# 	cd $DOTMGR
 # elif [[ "$1" != "restart" ]]; then
-#   # Make sure we have the latest files.
-#   e_header "Updating dotmgr"
-#   cd $DOTMGR
-#   prev_head="$(git rev-parse HEAD)"
-#   git pull
-#   git submodule update --init --recursive --quiet
-#   if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-#     if is_dotmgr_bin; then
-#       e_header "Changes detected, restarting script"
-#       exec "$0" restart
-#     else
-#       e_header "Changes detected, please re-run script"
-#       exit
-#     fi
-#   fi
+# 	# Make sure we have the latest files.
+# 	e_header "Updating dotmgr"
+# 	cd $DOTMGR
+# 	prev_head="$(git rev-parse HEAD)"
+# 	git pull
+# 	git submodule update --init --recursive --quiet
+# 	if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
+# 	if is_dotmgr_bin; then
+# 		e_header "Changes detected, restarting script"
+# 		exec "$0" restart
+# 	else
+# 		e_header "Changes detected, please re-run script"
+# 		exit
+# 	fi
+# 	fi
 # fi
-#
+
 
 
 # Source shared folder, everything that is needed for this
